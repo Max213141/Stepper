@@ -5,7 +5,9 @@
 const App = {
   data() {
     return {
-      activeIndex: 0, // то, что позволяет определить текущий активный шаг
+      forwardButton: 'Вперед',
+      activeButton: true,
+      activeIndex: 2, // то, что позволяет определить текущий активный шаг
       steps: [
         {title: 'Основы', text: 'В блоке вы познакомитесь со всеми основами Vue.js на практике. На протяжении блока мы напишем реактивное приложение, в процессе разработки которого разберем вся базу фреймворка.'},
         {title: 'Компоненты', text: 'Один из самых важных блоков в курсе, где вы узнаете все о компонентах. В блоке мы напишем 2 разных приложения и создадим более 5 различных UI компонентов как в реальной разработке. Блок расскажет про абсолютно все составляющие, которые есть в компонентах: взаимодействие, slots, асинхронные и динамические компоненты и тонна примеров.'},
@@ -16,24 +18,70 @@ const App = {
     }
   },
   methods: {
+    setActive(i){
+      return this.activeIndex=i
+    },
     prev() {
+      if(this.activeIndex !== 0){
+        this.activeIndex -= 1
+        console.log('<=')
+      }
       // когда нажимаем кнопку назад
     },
+    currentStep(i) {
+      if(this.activeIndex === i) {
+        if (this.activeButton === true){
+          return 'active'
+        }
+      } else if(this.activeIndex > i){
+        return 'done'
+      } else {
+        return ''
+      }
+    },
     reset() {
+        this.activeIndex=0
+        this.forwardButton = 'Вперед'
+        console.log('reset')
       // начать заново
     },
     nextOfFinish() {
+      if(this.activeIndex !== 4) {
+        this.activeIndex += 1
+      }
+      console.log('=>')
       // кнопка вперед или закончить
     },
-    setActive(idx) {
-      // когда нажимаем на определенный шаг
-    }
+    resetOrNext(){
+      if(this.forwardButton == 'Начать сначала'){
+        this.reset()
+      } else {this.nextOfFinish()}
+    },
+
+
+
   },
   computed: {
+    currentText(){
+      const ai =this.activeIndex
+      return this.steps[ai].text
+    },
+    finishButton(){
+      if(this.activeIndex === 4) {
+        this.forwardButton = 'Начать сначала'
+        return 'Начать сначала'
+        console.log('click')
+      } else {
+        return 'Вперед'
+      }
+    },
+
+
+
     // тут стоит определить несколько свойств:
     // 1. текущий выбранный шаг
     // 2. выключена ли кнопка назад
-    // 3. находимся ли мы на последнем шагaaе
+    // 3. находимся ли мы на последнем шаге
   }
 }
 
